@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Employee's CheckIn-Out</title>
-<head>
-<center>
-	<h1 style="color: navy">Employee's CheckIn-Out</h1>
-	<body bgcolor="beige">
-	<font color="black" size="4" style="font-family: avenir">
+    <title>Employee's CheckIn-Out</title>
+</head>
+<body>
+    <center>
+        <h1 style="color: navy">Employee's CheckIn-Out</h1>
+        <body bgcolor="beige">
+        <font color="black" size="4" style="font-family: avenir">
         
-        <p>CheckIn Time</p>
-	<p>{{CheckInTime}}</p>
-	
-	<p>CheckOut Time</p>
-	<p>{{CheckOutTime}}</p>
-	
-	<div class="back-button">
-		<a href='/'>
-			<button type="submit" class="form-button">BACK</button>
-		</a>
-	</div>
+        {% if CheckInTime %}
+        <p>Check-In Time:</p>
+        <p>{{ CheckInTime }}</p>
+        {% endif %}
+        
+        {% if CheckOutTime %}
+        <p>Check-Out Time:</p>
+        <p>{{ CheckOutTime }}</p>
+        {% endif %}
+        
+        <div class="back-button">
+            <a href='/'>
+                <button type="submit" class="form-button">BACK</button>
+            </a>
+        </div>
     </center>
 </body>
 </html>
