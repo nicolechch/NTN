@@ -245,7 +245,7 @@ def CheckIn():
             finally:
                 cursor.close()
                                             
-            return render_template("AttendanceOutput.html", date = datetime.now(), LoginTime = formatted_login)
+            return render_template("CheckInOut.html", date = datetime.now(), LoginTime = formatted_login)
         else:
             return render_template('CheckInOut.html')
     else:
@@ -288,7 +288,7 @@ def CheckOut():
                 return str(e)
             finally:
                 cursor.close()
-            return render_template("AttendanceOutput.html", date=datetime.now(),CheckOut = formatted_logout, CheckInTime = formatted_login[0])                                
+            return render_template("CheckInOut.html", date=datetime.now(),CheckOut = formatted_logout, CheckInTime = formatted_login[0])                                
         else:
             return render_template('CheckInOut.html')
     else:
