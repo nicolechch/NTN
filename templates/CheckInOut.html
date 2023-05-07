@@ -9,29 +9,21 @@
         <body bgcolor="beige">
         <font color="black" size="4" style="font-family: avenir">
         
-        {% if CheckInTime %}
         <p>Check-In Time:</p>
-        <p>{{ CheckInTime }}</p>
-        {% endif %}
+        <p id="checkInTime"></p>
         
-        {% if CheckOutTime %}
         <p>Check-Out Time:</p>
-        <p>{{ CheckOutTime }}</p>
-        {% endif %}
-        
-        <div class="back-button">
-            <a href='/Home'>
-                <button type="submit" class="form-button">BACK</button>
-            </a>
-        </div>
+        <p id="checkOutTime"></p>
+
+        <script>
+            // Get the CheckInTime and CheckOutTime values from Flask using Jinja2 templating
+            var checkInTime = "{{ CheckInTime }}";
+            var checkOutTime = "{{ CheckOutTime }}";
+
+            // Update the text content of the HTML elements with the datetime values
+            document.getElementById("checkInTime").textContent = checkInTime;
+            document.getElementById("checkOutTime").textContent = checkOutTime;
+        </script>
     </center>
 </body>
 </html>
-
-
-
-
-
-
-
-
