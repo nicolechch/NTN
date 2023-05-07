@@ -238,15 +238,15 @@ def CheckIn():
                 cursor.execute(insert_sql, {'emp_id': emp_id, 'check_in': formatted_login})
                 db_conn.commit()
                 print("Data inserted")
-                return render_template("CheckInOut.html", CheckInTime=formatted_login)
+                return render_template("CheckInOut.html", CheckInTime=CheckInTime)
             except Exception as e:
                 return "Error occurred while inserting data: " + str(e)
             finally:
                 cursor.close()
         else:
-            return render_template("CheckInOut.html", CheckInTime=formatted_login)
+            return render_template("CheckInOut.html", CheckInTime=CheckInTime)
     else:
-        return render_template("CheckInOut.html", CheckInTime=formatted_login)
+        return render_template("CheckInOut.html", CheckInTime=CheckInTime)
 
 
 @app.route("/CheckOut", methods=['POST', 'GET'])
@@ -273,7 +273,7 @@ def CheckOut():
                         cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
                         db_conn.commit()
                         print("Data updated")
-                        return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=formatted_logout)
+                        return render_template("CheckInOut.html", CheckInTime=CheckInTime, CheckOutTime=CheckOutTime)
                     except Exception as e:
                         return "Error occurred while updating data: " + str(e)
                 else:
@@ -283,9 +283,9 @@ def CheckOut():
             finally:
                 cursor.close()
         else:
-             return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=formatted_logout)
+             return render_template("CheckInOut.html", CheckInTime=CheckInTime, CheckOutTime=CheckOutTime)
     else:
-         return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=formatted_logout)
+         return render_template("CheckInOut.html", CheckInTime=CheckInTime, CheckOutTime=CheckOutTime)
 
 
     
