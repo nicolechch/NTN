@@ -236,7 +236,8 @@ def CheckIn():
                 cursor.execute(insert_sql, {'emp_id': emp_id, 'check_in': formatted_login})
                 db_conn.commit()
                 print("Data inserted")
-                return render_template("CheckInOut.html", CheckInTime=formatted_login)
+                print("CheckInTime:", CheckInTime)  # Add this line
+                return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=None)
             except Exception as e:
                 return "Error occurred while inserting data: " + str(e)
             finally:
@@ -266,6 +267,7 @@ def CheckOut():
 
                     CheckOutTime = datetime.now()
                     formatted_logout = CheckOutTime.strftime('%d/%m/%Y %H:%M:%S')
+                    print("CheckOutTime:", CheckOutTime)  # Add this line
 
                     try:
                         cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
@@ -284,6 +286,7 @@ def CheckOut():
             return render_template('CheckInOut.html')
     else:
         return render_template('CheckInOut.html')
+
 
     
 if __name__ == '__main__':
