@@ -252,29 +252,40 @@ def CheckOut():
     if request.method == 'POST':
         if 'emp_id' in request.form:
             emp_id = request.form['emp_id'].lower()
+            select_sql = "SELECT check_in FROM Attendance WHERE emp_id = %(emp_id)s AND check_out IS NULL"
             update_sql = "UPDATE Attendance SET check_out = %(check_out)s WHERE emp_id = %(emp_id)s AND check_out IS NULL"
             cursor = db_conn.cursor()
             
-            CheckOutTime = datetime.now()
-            formatted_logout = CheckOutTime.strftime('%d/%m/%Y %H:%M:%S')
-            print("Check out time:", formatted_logout)
-            
             try:
-                cursor.execute(update_sql, {'check_out': formatted_logout, 'emp_id': emp_id})
-                if cursor.rowcount == 0:
-                    return "Employee ID not found or already checked out"
+                cursor.execute(select_sql, {'emp_id': emp_id})
+                CheckInTime = cursor.fetchone()
                 
-                db_conn.commit()
-                print("Data updated")
-                return render_template("CheckOut.html", date=datetime.now(), CheckOutTime=formatted_logout)
+                if CheckInTime:
+                    formatted_login = CheckInTime[0]
+                    print("Check in time:", formatted_login)
+                    
+                    CheckOutTime = datetime.now()
+                    formatted_logout = CheckOutTime.strftime('%d/%m/%Y %H:%M:%S')
+                    
+                    try:
+                        cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
+                        db_conn.commit()
+                        print("Data updated")
+                        return render_template("CheckOut.html", date=datetime.now(), CheckOutTime=formatted_logout)
+                    except Exception as e:
+                        return "Error occurred while updating data: " + str(e)
+                else:
+                    return "Employee ID not found or already checked out"
             except Exception as e:
-                return "Error occurred while updating data: " + str(e)
+                return "Error occurred while fetching data: " + str(e)
             finally:
                 cursor.close()
         else:
             return render_template('CheckOut.html')
     else:
         return render_template('CheckOut.html')
+
+
 
     
     
