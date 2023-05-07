@@ -220,33 +220,6 @@ def Attendance():
     else:
         return render_template('Attendance.html')
 
-@app.route("/CheckIn", methods=['POST', 'GET'])
-def CheckIn():
-    if request.method == 'POST':
-        if 'emp_id' in request.form:
-            emp_id = request.form['emp_id'].lower()
-            insert_sql = "INSERT INTO Attendance (emp_id, check_in) VALUES (%(emp_id)s, %(check_in)s)"
-            cursor = db_conn.cursor()
-            
-            CheckInTime = datetime.now()
-            formatted_login = CheckInTime.strftime('%d/%m/%Y %H:%M:%S')
-            print("Check in time:", formatted_login)
-            
-            try:
-                cursor.execute(insert_sql, {'emp_id': emp_id, 'check_in': formatted_login})
-                db_conn.commit()
-                print("Data inserted")
-                return render_template("CheckInOut.html", date=datetime.now(), CheckInTime=formatted_login)
-            except Exception as e:
-                return "Error occurred while inserting data: " + str(e)
-            finally:
-                cursor.close()
-        else:
-            return render_template('CheckInOut.html')
-    else:
-        return render_template('CheckInOut.html')
-
-
 @app.route("/CheckOut", methods=['POST', 'GET'])
 def CheckOut():
     if request.method == 'POST':
@@ -271,7 +244,7 @@ def CheckOut():
                         cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
                         db_conn.commit()
                         print("Data updated")
-                        return render_template("CheckInOut.html", date=datetime.now(), CheckOutTime=formatted_logout)
+                        return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=formatted_logout)
                     except Exception as e:
                         return "Error occurred while updating data: " + str(e)
                 else:
@@ -284,6 +257,7 @@ def CheckOut():
             return render_template('CheckInOut.html')
     else:
         return render_template('CheckInOut.html')
+
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
