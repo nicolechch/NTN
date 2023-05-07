@@ -236,15 +236,15 @@ def CheckIn():
                 cursor.execute(insert_sql, {'emp_id': emp_id, 'check_in': formatted_login})
                 db_conn.commit()
                 print("Data inserted")
-                return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=None)
+                return render_template("CheckIn.html", date=datetime.now(), CheckInTime=formatted_login)
             except Exception as e:
                 return "Error occurred while inserting data: " + str(e)
             finally:
                 cursor.close()
         else:
-            return render_template('CheckInOut.html')
+            return render_template('CheckIn.html')
     else:
-        return render_template('CheckInOut.html')
+        return render_template('CheckIn.html')
 
 
 @app.route("/CheckOut", methods=['POST', 'GET'])
@@ -271,7 +271,7 @@ def CheckOut():
                         cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
                         db_conn.commit()
                         print("Data updated")
-                        return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=formatted_logout)
+                        return render_template("CheckOut.html", date=datetime.now(), CheckOutTime=formatted_logout)
                     except Exception as e:
                         return "Error occurred while updating data: " + str(e)
                 else:
@@ -281,10 +281,9 @@ def CheckOut():
             finally:
                 cursor.close()
         else:
-            return render_template('CheckInOut.html')
+            return render_template('CheckOut.html')
     else:
-        return render_template('CheckInOut.html')
-    
+        return render_template('CheckOut.html')
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
