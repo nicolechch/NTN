@@ -221,6 +221,20 @@ def Attendance():
     else:
         return render_template('Attendance.html')
 
+from flask import Flask, render_template, request
+from datetime import datetime
+import mysql.connector
+
+app = Flask(__name__)
+
+# Configure your database connection
+db_conn = mysql.connector.connect(
+    host="your_host",
+    user="your_username",
+    password="your_password",
+    database="your_database"
+)
+
 @app.route("/CheckIn", methods=['POST', 'GET'])
 def CheckIn():
     if request.method == 'POST':
@@ -228,17 +242,16 @@ def CheckIn():
             emp_id = request.form['emp_id'].lower()
             insert_sql = "INSERT INTO Attendance (emp_id, check_in) VALUES (%(emp_id)s, %(check_in)s)"
             cursor = db_conn.cursor()
-
+            
             CheckInTime = datetime.now()
             formatted_login = CheckInTime.strftime('%d/%m/%Y %H:%M:%S')
             print("Check in time:", formatted_login)
-
+            
             try:
                 cursor.execute(insert_sql, {'emp_id': emp_id, 'check_in': formatted_login})
                 db_conn.commit()
                 print("Data inserted")
-                print("CheckInTime:", CheckInTime)  # Add this line
-                return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=None)
+                return render_template("CheckInOut.html", CheckInTime=formatted_login)
             except Exception as e:
                 return "Error occurred while inserting data: " + str(e)
             finally:
@@ -257,19 +270,18 @@ def CheckOut():
             select_sql = "SELECT check_in FROM Attendance WHERE emp_id = %(emp_id)s AND check_out IS NULL"
             update_sql = "UPDATE Attendance SET check_out = %(check_out)s WHERE emp_id = %(emp_id)s AND check_out IS NULL"
             cursor = db_conn.cursor()
-
+            
             try:
                 cursor.execute(select_sql, {'emp_id': emp_id})
                 CheckInTime = cursor.fetchone()
-
+                
                 if CheckInTime:
                     formatted_login = CheckInTime[0]
                     print("Check in time:", formatted_login)
-
+                    
                     CheckOutTime = datetime.now()
                     formatted_logout = CheckOutTime.strftime('%d/%m/%Y %H:%M:%S')
-                    print("CheckOutTime:", CheckOutTime)  # Add this line
-
+                    
                     try:
                         cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
                         db_conn.commit()
@@ -287,6 +299,11 @@ def CheckOut():
             return render_template('CheckInOut.html')
     else:
         return render_template('CheckInOut.html')
+
+
+if __name__ == '__main__':
+    app.run()
+
 
 
     
