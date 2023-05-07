@@ -18,31 +18,48 @@
         }
 		
 	</script>
+	<style>
+		body {
+			background-color: beige;
+		}
+		h1 {
+			color: navy;
+			font-size: 36px; /* adjust as needed */
+		}
+		p {
+			color: red;
+			font-size: 18px; /* adjust as needed */
+		}
+	</style>
 	</head>
+		<center>
 		<h1 style="color: navy">Employee's Attendance</h1>
 		<body bgcolor="beige">
-			ID:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="emp_id"><br><br>
-			
-			<form action="CheckIn.html" method="GET">
-			<input type="hidden" name="check_in" id="check_in" value="">
+		<form method="POST" action="{{ url_for('Attendance') }}">
+			<label for="emp_id">Employee ID: </label>
+			<input type="text" id="emp_id" name="emp_id" required>
+			<input type="submit" value="Verify">
+		</form>
+		{% if error %}
+			<p>Invalid Employee ID. Please try again.</p>
+		{% endif %}
+		
+		{% if fname %}
+			<form action="/CheckIn" autocomplete="on" method="POST" enctype="multipart/form-date">
 			<button type="submit">Check In</button>
 			<br><br>
 			</form>
 			
-			<form action="CheckOut.html" autocomplete="on" method = "POST" enctype="multipart/form-data">
-			<button type="submit">Check Out</button>	
+			<form action="/CheckOut" autocomplete="on" method = "POST" enctype="multipart/form-data">
+				<button type="submit"><u>Check Out</u></button>	
 			<br><br>
 			</form>
-			<form action="Home.html" autocomplete="on" method = "POST" enctype="multipart/form-data">
-			<button type="submit">Back to Home</button>		
 			
+			<form action="/Home" autocomplete="on" method = "POST" enctype="multipart/form-data">
+				<button type="submit"><u>Back to Home</u></button>		
+				</center>
+		{% endif %}
 	</body>
 	</font>
 </center>
 </html>
-
-
-
-
-
-
