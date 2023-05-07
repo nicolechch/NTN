@@ -227,25 +227,23 @@ def CheckIn():
     if request.method == 'POST':
         if 'emp_id' in request.form:
             emp_id = request.form['emp_id']
-            update_sql = "UPDATE employee SET check_in = (&(check_in)s) WHERE emp_id = %(emp_id)s"
+            update_sql = "UPDATE employee SET check_in = (%s) WHERE emp_id = %s"
             cursor = db_conn.cursor()
-            
+
             CheckInTime = datetime.now()
             formatted_login = CheckInTime.strftime('%d/%m/%Y %H:%M:%S')
-            print("Check in time:{}", formatted_login)
-            
+            print("Check in time:", formatted_login)
+
             try:
-                cursor.execute(update_sql, {'check_in" : formatted_login, 'emp_id':int(emp_id)})
+                cursor.execute(update_sql, (formatted_login, emp_id))
                 db_conn.commit()
                 print("Data inserted")
-                                            
             except Exception as e:
                 return str(e)
-                                            
             finally:
                 cursor.close()
-                                            
-            return render_template("CheckInOut.html", date = datetime.now(), LoginTime = formatted_login)
+
+            return render_template("CheckInOut.html", date=datetime.now())
         else:
             return render_template('CheckInOut.html')
     else:
