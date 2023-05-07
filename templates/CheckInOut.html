@@ -8,13 +8,17 @@
 	<body bgcolor="beige">
 	<font color="black" size="4" style="font-family: avenir">
         
-        {% if CheckInTime %}
-        <h2>Check-In Time: {{ CheckInTime }}</h2>
-        {% endif %}
-        
-        {% if CheckOutTime %}
-        <h2>Check-Out Time: {{ CheckOutTime }}</h2>
-        {% endif %}
+        <p>CheckIn Time</p>
+	<p>{{CheckInTime}}</p>
+	
+	<p>CheckIn Time</p>
+	<p>{{CheckInTime}}</p>
+	
+	<div class="back-button">
+		<a href='/'>
+			<button type="submit" class="form-button">BACK</button>
+		</a>
+	</div>
     </center>
 </body>
 </html>
