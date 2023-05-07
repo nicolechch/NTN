@@ -256,8 +256,7 @@ def CheckOut():
         if 'emp_id' in request.form:
             emp_id = request.form['emp_id']
             select_sql = "SELECT check_in FROM Attendance WHERE emp_id = %(emp_id)s"
-            insert_sql = "INSERT INTO Attendance VALUES (%s,%s,%s)
-                                            "
+            insert_sql = "INSERT INTO Attendance VALUES (%s, %s, %s)"
             cursor = db_conn.cursor()
             
             try:
@@ -266,27 +265,23 @@ def CheckOut():
                 for row in CheckInTime:
                     formatted_login = row
                     print(formatted_login[0])
-                                            
+                    
                     CheckOutTime = datetime.now()
-                    CheckInDate = datetime.strptime(formatted_login[0]'%d/%m/%Y %H:%M:%S') 
-                                            
-                    formatted_logout = CheckOutTime.strftime(formatted_login[0]'%d/%m/%Y %H:%M:%S')
-                                            
+                    CheckInDate = datetime.strptime(formatted_login[0], '%d/%m/%Y %H:%M:%S')
+                    formatted_logout = CheckOutTime.strftime('%d/%m/%Y %H:%M:%S')
+                    
                     try:
-                        cursor.execute(insert_statement,(emp_id,formatted_login[0],formatted_logout))
+                        cursor.execute(insert_sql, (emp_id, formatted_login[0], formatted_logout))
                         db_conn.commit()
                         print("Data inserted")                    
-                                            
                     except Exception as e:
                         return str(e)
-                else:
-                    return "Employee ID not found or already checked out"
-                                            
+                
+                return render_template("CheckInOut.html", date=datetime.now(), CheckOut=formatted_logout, CheckInTime=formatted_login[0])
             except Exception as e:
                 return str(e)
             finally:
                 cursor.close()
-            return render_template("CheckInOut.html", date=datetime.now(),CheckOut = formatted_logout, CheckInTime = formatted_login[0])                                
         else:
             return render_template('CheckInOut.html')
     else:
