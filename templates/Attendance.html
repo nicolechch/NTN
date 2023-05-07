@@ -5,19 +5,44 @@
 <head>
 <center>
 	<font color="black" size="4" style="font-family: avenir">
+	<script>
+		function dateAndTime() {
+			var currentDate = new Date();
+			var dateTimeString = currentDate.toLocaleString();
+			return currentDate;
+		}
+		
+		function submitCheckIn() {
+            var checkInTime = getCurrentDateTime().toLocaleString();
+            window.location.href = "CheckIn.html?checkin=" + encodeURIComponent(checkInTime);
+        }
+		
+	</script>
+	</head>
 		<h1 style="color: navy">Employee's Attendance</h1>
 		<body bgcolor="beige">
-				ID:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="reg_id"><br><br>
-				<form action="/CheckIn" autocomplete="on" method = "POST" enctype="multipart/form-data">
-				<form1 action="/CheckOut" autocomplete="on" method = "POST" enctype="multipart/form-data">
-				
-				<button type="submit" style="background: grey; height: 45px; width: 200px; color: white; size: 5; font:oblique;">CHECK IN</button>
-				<button1 type="submit" style="background: grey; height: 45px; width: 200px; color: white; size: 5; font:oblique;">CHECK OUT</button>
-
+			ID:<br> <input style="height:25px;font-size:14pt;color:grey;" type="text" name="emp_id"><br><br>
+			
+			<form action="CheckIn.html" method="GET">
+			<input type="hidden" name="check_in" id="check_in" value="">
+			<button type="submit">Check In</button>
+			<br><br>
 			</form>
-			</form1>
-<a href="Register.html">Register A New Account</a>
-	<body>
+			
+			<form action="CheckOut.html" autocomplete="on" method = "POST" enctype="multipart/form-data">
+			<button type="submit">Check Out</button>	
+			<br><br>
+			</form>
+			<form action="Home.html" autocomplete="on" method = "POST" enctype="multipart/form-data">
+			<button type="submit">Back to Home</button>		
+			
+	</body>
 	</font>
 </center>
 </html>
+
+
+
+
+
+
