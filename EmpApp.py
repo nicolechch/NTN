@@ -226,23 +226,26 @@ def Attendance():
 def CheckIn():
     if request.method == 'POST':
         if 'emp_id' in request.form:
-            emp_id = request.form['emp_id'].lower()
-            insert_sql = "INSERT INTO Attendance (emp_id, check_in) VALUES (%(emp_id)s, %(check_in)s)"
+            emp_id = request.form['emp_id']
+            update_sql = "UPDATE employee SET check_in = (&(check_in)s) WHERE emp_id = %(emp_id)s"
             cursor = db_conn.cursor()
             
             CheckInTime = datetime.now()
             formatted_login = CheckInTime.strftime('%d/%m/%Y %H:%M:%S')
-            print("Check in time:", formatted_login)
+            print("Check in time:{}", formatted_login)
             
             try:
-                cursor.execute(insert_sql, {'emp_id': emp_id, 'check_in': formatted_login})
+                cursor.execute(update_sql, {'check_in" : formatted_login, 'emp_id':int(emp_id)})
                 db_conn.commit()
                 print("Data inserted")
-                return render_template("CheckInOut.html", CheckInTime=formatted_login)
+                                            
             except Exception as e:
-                return "Error occurred while inserting data: " + str(e)
+                return str(e)
+                                            
             finally:
                 cursor.close()
+                                            
+            return render_template("AttendanceOutput.html", date = datetime.now(), LoginTime = formatted_login)
         else:
             return render_template('CheckInOut.html')
     else:
@@ -253,35 +256,39 @@ def CheckIn():
 def CheckOut():
     if request.method == 'POST':
         if 'emp_id' in request.form:
-            emp_id = request.form['emp_id'].lower()
-            select_sql = "SELECT check_in FROM Attendance WHERE emp_id = %(emp_id)s AND check_out IS NULL"
-            update_sql = "UPDATE Attendance SET check_out = %(check_out)s WHERE emp_id = %(emp_id)s AND check_out IS NULL"
+            emp_id = request.form['emp_id']
+            select_sql = "SELECT check_in FROM Attendance WHERE emp_id = %(emp_id)s"
+            insert_sql = "INSERT INTO Attendance VALUES (%s,%s,%s)
+                                            "
             cursor = db_conn.cursor()
             
             try:
                 cursor.execute(select_sql, {'emp_id': emp_id})
-                CheckInTime = cursor.fetchone()
-                
-                if CheckInTime:
-                    formatted_login = CheckInTime[0]
-                    print("Check in time:", formatted_login)
-                    
+                CheckInTime = cursor.fetchall()
+                for row in CheckInTime:
+                    formatted_login = row
+                    print(formatted_login[0])
+                                            
                     CheckOutTime = datetime.now()
-                    formatted_logout = CheckOutTime.strftime('%d/%m/%Y %H:%M:%S')
-                    
+                    CheckInDate = datetime.strptime(formatted_login[0]'%d/%m/%Y %H:%M:%S') 
+                                            
+                    formatted_logout = CheckOutTime.strftime(formatted_login[0]'%d/%m/%Y %H:%M:%S')
+                                            
                     try:
-                        cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
+                        cursor.execute(insert_statement,(emp_id,formatted_login[0],formatted_logout))
                         db_conn.commit()
-                        print("Data updated")
-                        return render_template("CheckInOut.html", CheckInTime=formatted_login, CheckOutTime=formatted_logout)
+                        print("Data inserted")                    
+                                            
                     except Exception as e:
-                        return "Error occurred while updating data: " + str(e)
+                        return str(e)
                 else:
                     return "Employee ID not found or already checked out"
+                                            
             except Exception as e:
-                return "Error occurred while fetching data: " + str(e)
+                return str(e)
             finally:
                 cursor.close()
+            return render_template("AttendanceOutput.html", date=datetime.now(),CheckOut = formatted_logout, CheckInTime = formatted_login[0])                                
         else:
             return render_template('CheckInOut.html')
     else:
