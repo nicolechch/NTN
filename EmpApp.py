@@ -244,9 +244,9 @@ def CheckIn():
             finally:
                 cursor.close()
         else:
-            return render_template("CheckInOut.html", CheckInTime=CheckInTime)
+            return render_template('CheckInOut.html')
     else:
-        return render_template("CheckInOut.html", CheckInTime=CheckInTime)
+        return render_template('CheckInOut.html')
 
 
 @app.route("/CheckOut", methods=['POST', 'GET'])
@@ -283,10 +283,9 @@ def CheckOut():
             finally:
                 cursor.close()
         else:
-             return render_template("CheckInOut.html", CheckInTime=CheckInTime, CheckOutTime=CheckOutTime)
+            return render_template('CheckInOut.html')
     else:
-         return render_template("CheckInOut.html", CheckInTime=CheckInTime, CheckOutTime=CheckOutTime)
-
+        return render_template('CheckInOut.html')
 
     
 if __name__ == '__main__':
