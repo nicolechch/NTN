@@ -221,19 +221,6 @@ def Attendance():
     else:
         return render_template('Attendance.html')
 
-from flask import Flask, render_template, request
-from datetime import datetime
-import mysql.connector
-
-app = Flask(__name__)
-
-# Configure your database connection
-db_conn = mysql.connector.connect(
-    host="your_host",
-    user="your_username",
-    password="your_password",
-    database="your_database"
-)
 
 @app.route("/CheckIn", methods=['POST', 'GET'])
 def CheckIn():
@@ -299,11 +286,6 @@ def CheckOut():
             return render_template('CheckInOut.html')
     else:
         return render_template('CheckInOut.html')
-
-
-if __name__ == '__main__':
-    app.run()
-
 
 
     
