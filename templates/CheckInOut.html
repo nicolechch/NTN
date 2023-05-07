@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Check-In and Check-Out</title>
+</head>
+<body>
+    <center>
+        <h1>Employee's Attendance</h1>
+        <h2>Check In</h2>
+        <form action="/CheckIn" method="POST">
+            <label for="checkin_emp_id">Employee ID:</label>
+            <input type="text" id="checkin_emp_id" name="emp_id" required>
+            <br><br>
+            <input type="submit" value="Check In">
+        </form>
+
+        <h2>Check Out</h2>
+        <form action="/CheckOut" method="POST">
+            <label for="checkout_emp_id">Employee ID:</label>
+            <input type="text" id="checkout_emp_id" name="emp_id" required>
+            <br><br>
+            <input type="submit" value="Check Out">
+        </form>
+    </center>
+</body>
+</html>
+
+
+
+
+
+
