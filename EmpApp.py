@@ -227,16 +227,16 @@ def CheckIn():
             emp_id = request.form['emp_id'].lower()
             insert_sql = "INSERT INTO Attendance (emp_id, check_in) VALUES (%(emp_id)s, %(check_in)s)"
             cursor = db_conn.cursor()
-            
+
             CheckInTime = datetime.now()
             formatted_login = CheckInTime.strftime('%d/%m/%Y %H:%M:%S')
             print("Check in time:", formatted_login)
-            
+
             try:
                 cursor.execute(insert_sql, {'emp_id': emp_id, 'check_in': formatted_login})
                 db_conn.commit()
                 print("Data inserted")
-                return render_template("CheckInOut.html", date=datetime.now(), CheckInTime=formatted_login)
+                return render_template("CheckInOut.html", CheckInTime=formatted_login)
             except Exception as e:
                 return "Error occurred while inserting data: " + str(e)
             finally:
@@ -245,8 +245,8 @@ def CheckIn():
             return render_template('CheckInOut.html')
     else:
         return render_template('CheckInOut.html')
-    
-    
+
+
 @app.route("/CheckOut", methods=['POST', 'GET'])
 def CheckOut():
     if request.method == 'POST':
@@ -255,18 +255,18 @@ def CheckOut():
             select_sql = "SELECT check_in FROM Attendance WHERE emp_id = %(emp_id)s AND check_out IS NULL"
             update_sql = "UPDATE Attendance SET check_out = %(check_out)s WHERE emp_id = %(emp_id)s AND check_out IS NULL"
             cursor = db_conn.cursor()
-            
+
             try:
                 cursor.execute(select_sql, {'emp_id': emp_id})
                 CheckInTime = cursor.fetchone()
-                
+
                 if CheckInTime:
                     formatted_login = CheckInTime[0]
                     print("Check in time:", formatted_login)
-                    
+
                     CheckOutTime = datetime.now()
                     formatted_logout = CheckOutTime.strftime('%d/%m/%Y %H:%M:%S')
-                    
+
                     try:
                         cursor.execute(update_sql, {'emp_id': emp_id, 'check_out': formatted_logout})
                         db_conn.commit()
