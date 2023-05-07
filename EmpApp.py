@@ -199,23 +199,26 @@ def GetEmp():
 def Attendance():
     if request.method == 'POST':
         if 'emp_id' in request.form:
-            emp_id = request.form['emp_id']
-            check_sql = "SELECT * FROM employee WHERE emp_id = %s"
+            emp_id = request.form['emp_id'].lower()            
+            check_sql = "SELECT emp_id FROM employee WHERE emp_id = %s"
             cursor = db_conn.cursor()
             cursor.execute(check_sql, (emp_id,))
             employee = cursor.fetchone()
             
-            if employee is not None:
-                #employee exists in database
-                print("Welcome, employee", emp_id)
+            if employee is None:
+                error = "Employee ID does not exist."
+                return render_template('Attendance.html', error=error)
             else:
-                error = "Employee ID not found."
-                return render_template("Attendance.html", error=error)
-        else:
-            error = "Please enter an employee ID."
-            return render_template("Attendance.html", error=error)
+                return render_template('CheckIn.html', emp_id=emp_id)
     else:
-        return render_template("Attendance.html")
+        return render_template('Attendance.html')
 
+@app.route("/CheckIn", methods=['POST', 'GET'])
+def CheckIn():
+    check_in = request.form['check_in']
+    insert_sql = "INSERT INTO employee VALUES (%s)"
+    cursor = db_conn.cursor()
+    
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
